@@ -1,0 +1,96 @@
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+if playerGui:FindFirstChild("CustomLoadingScreen") then
+	playerGui:FindFirstChild("CustomLoadingScreen"):Destroy()
+end
+
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "CustomLoadingScreen"
+loadingGui.IgnoreGuiInset = true
+loadingGui.ResetOnSpawn = false
+loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+loadingGui.Parent = game:GetService("CoreGui")
+
+local blocker = Instance.new("TextButton")
+blocker.Size = UDim2.new(1, 0, 1, 0)
+blocker.Position = UDim2.new(0, 0, 0, 0)
+blocker.BackgroundColor3 = Color3.new(0, 0, 0)
+blocker.BorderSizePixel = 0
+blocker.AutoButtonColor = false
+blocker.Text = ""
+blocker.Modal = true
+blocker.Parent = loadingGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(1, 0, 1, 0)
+frame.BackgroundTransparency = 1
+frame.Parent = loadingGui
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0.18, 0)
+title.BackgroundTransparency = 1
+title.Text = "🌴GROW A GARDEN🌴"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
+title.Parent = frame
+
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Size = UDim2.new(1, 0, 0, 30)
+loadingLabel.Position = UDim2.new(0, 0, 0.32, 0)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.Text = "🔄 LOADING SCRIPT..."
+loadingLabel.TextColor3 = Color3.new(1, 1, 1)
+loadingLabel.Font = Enum.Font.Gotham
+loadingLabel.TextScaled = true
+loadingLabel.Parent = frame
+
+local percent = Instance.new("TextLabel")
+percent.Size = UDim2.new(1, 0, 0, 30)
+percent.Position = UDim2.new(0, 0, 0.42, 0)
+percent.BackgroundTransparency = 1
+percent.Text = "0%"
+percent.TextColor3 = Color3.fromRGB(0, 255, 0)
+percent.Font = Enum.Font.GothamBold
+percent.TextScaled = true
+percent.Parent = frame
+
+local progressBarBg = Instance.new("Frame")
+progressBarBg.Size = UDim2.new(0.6, 0, 0, 10)
+progressBarBg.Position = UDim2.new(0.2, 0, 0.49, 0)
+progressBarBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+progressBarBg.BorderSizePixel = 0
+progressBarBg.Parent = frame
+
+local progressBarFill = Instance.new("Frame")
+progressBarFill.Size = UDim2.new(0, 0, 1, 0)
+progressBarFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+progressBarFill.BorderSizePixel = 0
+progressBarFill.Parent = progressBarBg
+
+local warning = Instance.new("TextLabel")
+warning.Size = UDim2.new(1, -20, 0, 30)
+warning.Position = UDim2.new(0, 10, 0.6, 0)
+warning.BackgroundTransparency = 1
+warning.Text = "🌀 THE SCRIPT IS GENERATING PLEASE WAIT..."
+warning.TextColor3 = Color3.fromRGB(255, 255, 100)
+warning.Font = Enum.Font.GothamBold
+warning.TextScaled = true
+warning.TextWrapped = true
+warning.TextYAlignment = Enum.TextYAlignment.Center
+warning.Parent = frame
+
+task.spawn(function()
+	for i = 1, 100 do
+		percent.Text = i .. "%"
+		progressBarFill.Size = UDim2.new(i / 100, 0, 1, 0)
+		wait(0.1)
+	end
+
+	loadingGui:Destroy()
+
+	-- Load your script
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeModz/LimitHub/refs/heads/main/LimitHub_Luarmor_E.lua"))()
+end)
