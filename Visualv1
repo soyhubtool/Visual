@@ -1,96 +1,180 @@
+-- 🌴 FULL SoyHubTool GUI with Toggle, Buttons, and Labels (w/ OMG Hub) 🌴
+
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
 
-if playerGui:FindFirstChild("CustomLoadingScreen") then
-	playerGui:FindFirstChild("CustomLoadingScreen"):Destroy()
+-- Remove old GUIs
+for _, name in pairs({"MiniLoadingScreen", "SoyHubUI", "ButtonLoading", "SoyHubToggleGui"}) do
+    local gui = playerGui:FindFirstChild(name)
+    if gui then gui:Destroy() end
 end
 
-local loadingGui = Instance.new("ScreenGui")
-loadingGui.Name = "CustomLoadingScreen"
+-- 🔴 Red Border Utility
+local function addRedBorder(frame)
+    local stroke = Instance.new("UIStroke", frame)
+    stroke.Thickness = 1
+    stroke.Color = Color3.fromRGB(255, 60, 60)
+    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+end
+
+-- 👹 Initial Ogre Loading Screen
+local loadingGui = Instance.new("ScreenGui", playerGui)
+loadingGui.Name = "MiniLoadingScreen"
 loadingGui.IgnoreGuiInset = true
-loadingGui.ResetOnSpawn = false
 loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-loadingGui.Parent = game:GetService("CoreGui")
 
-local blocker = Instance.new("TextButton")
-blocker.Size = UDim2.new(1, 0, 1, 0)
-blocker.Position = UDim2.new(0, 0, 0, 0)
-blocker.BackgroundColor3 = Color3.new(0, 0, 0)
-blocker.BorderSizePixel = 0
-blocker.AutoButtonColor = false
-blocker.Text = ""
-blocker.Modal = true
-blocker.Parent = loadingGui
+local frame = Instance.new("Frame", loadingGui)
+frame.Size = UDim2.new(0, 330, 0, 110)
+frame.Position = UDim2.new(0.5, -165, 0.5, -55)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+frame.BorderSizePixel = 0
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+addRedBorder(frame)
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(1, 0, 1, 0)
-frame.BackgroundTransparency = 1
-frame.Parent = loadingGui
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 50)
-title.Position = UDim2.new(0, 0, 0.18, 0)
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 8)
+title.Text = "👹 Loading SoyHubTool Script 👹"
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 20
+title.TextColor3 = Color3.fromRGB(240, 200, 255)
 title.BackgroundTransparency = 1
-title.Text = "🌴GROW A GARDEN🌴"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.Font = Enum.Font.GothamBold
-title.TextScaled = true
-title.Parent = frame
 
-local loadingLabel = Instance.new("TextLabel")
-loadingLabel.Size = UDim2.new(1, 0, 0, 30)
-loadingLabel.Position = UDim2.new(0, 0, 0.32, 0)
-loadingLabel.BackgroundTransparency = 1
-loadingLabel.Text = "🔄 LOADING SCRIPT..."
-loadingLabel.TextColor3 = Color3.new(1, 1, 1)
-loadingLabel.Font = Enum.Font.Gotham
-loadingLabel.TextScaled = true
-loadingLabel.Parent = frame
+local progressBg = Instance.new("Frame", frame)
+progressBg.Size = UDim2.new(0.9, 0, 0, 20)
+progressBg.Position = UDim2.new(0.05, 0, 0, 68)
+progressBg.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+progressBg.BorderSizePixel = 0
+Instance.new("UICorner", progressBg).CornerRadius = UDim.new(0, 8)
 
-local percent = Instance.new("TextLabel")
-percent.Size = UDim2.new(1, 0, 0, 30)
-percent.Position = UDim2.new(0, 0, 0.42, 0)
-percent.BackgroundTransparency = 1
-percent.Text = "0%"
-percent.TextColor3 = Color3.fromRGB(0, 255, 0)
-percent.Font = Enum.Font.GothamBold
-percent.TextScaled = true
-percent.Parent = frame
+local progressFill = Instance.new("Frame", progressBg)
+progressFill.Size = UDim2.new(0, 0, 1, 0)
+progressFill.BackgroundColor3 = Color3.fromRGB(170, 130, 255)
+progressFill.BorderSizePixel = 0
+Instance.new("UICorner", progressFill).CornerRadius = UDim.new(0, 8)
 
-local progressBarBg = Instance.new("Frame")
-progressBarBg.Size = UDim2.new(0.6, 0, 0, 10)
-progressBarBg.Position = UDim2.new(0.2, 0, 0.49, 0)
-progressBarBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-progressBarBg.BorderSizePixel = 0
-progressBarBg.Parent = frame
+TweenService:Create(progressFill, TweenInfo.new(5), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+wait(5)
+loadingGui:Destroy()
 
-local progressBarFill = Instance.new("Frame")
-progressBarFill.Size = UDim2.new(0, 0, 1, 0)
-progressBarFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-progressBarFill.BorderSizePixel = 0
-progressBarFill.Parent = progressBarBg
+-- 🌴 Main SoyHubTool GUI
+local gui = Instance.new("ScreenGui", playerGui)
+gui.Name = "SoyHubUI"
+gui.ResetOnSpawn = false
+gui.Enabled = true
 
-local warning = Instance.new("TextLabel")
-warning.Size = UDim2.new(1, -20, 0, 30)
-warning.Position = UDim2.new(0, 10, 0.6, 0)
-warning.BackgroundTransparency = 1
-warning.Text = "🌀 THE SCRIPT IS GENERATING PLEASE WAIT..."
-warning.TextColor3 = Color3.fromRGB(255, 255, 100)
-warning.Font = Enum.Font.GothamBold
-warning.TextScaled = true
-warning.TextWrapped = true
-warning.TextYAlignment = Enum.TextYAlignment.Center
-warning.Parent = frame
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.Size = UDim2.new(0, 280, 0, 240)
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -120)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 12)
+addRedBorder(mainFrame)
 
-task.spawn(function()
-	for i = 1, 100 do
-		percent.Text = i .. "%"
-		progressBarFill.Size = UDim2.new(i / 100, 0, 1, 0)
-		wait(0.05) -- 5 seconds total
-	end
+local titleLabel = Instance.new("TextLabel", mainFrame)
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "👹 SoyHubTool 👹"
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 18
+titleLabel.TextColor3 = Color3.fromRGB(200, 200, 255)
 
-	loadingGui:Destroy()
+-- Tag label
+local tag = Instance.new("TextLabel", mainFrame)
+tag.Size = UDim2.new(1, 0, 0, 20)
+tag.Position = UDim2.new(0, 0, 1, -20)
+tag.Text = "Made by SoyHubTool"
+tag.Font = Enum.Font.Gotham
+tag.TextSize = 14
+tag.TextColor3 = Color3.fromRGB(255, 120, 120)
+tag.BackgroundTransparency = 1
 
-	-- Load your script here
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeModz/LimitHub/refs/heads/main/LimitHub_Luarmor_E.lua"))()
+-- 🔘 Button Function
+local function createButton(text, yOffset, loadingText, loadstringURL)
+    local button = Instance.new("TextButton", mainFrame)
+    button.Size = UDim2.new(0.8, 0, 0, 30)
+    button.Position = UDim2.new(0.1, 0, 0, yOffset)
+    button.Text = text
+    button.Font = Enum.Font.Gotham
+    button.TextSize = 16
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+    button.BorderSizePixel = 0
+    Instance.new("UICorner", button).CornerRadius = UDim.new(0, 8)
+
+    button.MouseButton1Click:Connect(function()
+        -- Mini loading screen
+        local loadingGui = Instance.new("ScreenGui", playerGui)
+        loadingGui.Name = "ButtonLoading"
+        loadingGui.IgnoreGuiInset = true
+        loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+
+        local frame = Instance.new("Frame", loadingGui)
+        frame.Size = UDim2.new(0, 300, 0, 100)
+        frame.Position = UDim2.new(0.5, -150, 0.5, -50)
+        frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+        frame.BorderSizePixel = 0
+        Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+        addRedBorder(frame)
+
+        local label = Instance.new("TextLabel", frame)
+        label.Size = UDim2.new(1, 0, 0, 40)
+        label.Position = UDim2.new(0, 0, 0, 8)
+        label.Text = loadingText
+        label.Font = Enum.Font.GothamBold
+        label.TextSize = 18
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.BackgroundTransparency = 1
+
+        local barBg = Instance.new("Frame", frame)
+        barBg.Size = UDim2.new(0.9, 0, 0, 18)
+        barBg.Position = UDim2.new(0.05, 0, 0, 60)
+        barBg.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+        barBg.BorderSizePixel = 0
+        Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 8)
+
+        local barFill = Instance.new("Frame", barBg)
+        barFill.Size = UDim2.new(0, 0, 1, 0)
+        barFill.BackgroundColor3 = Color3.fromRGB(170, 130, 255)
+        barFill.BorderSizePixel = 0
+        Instance.new("UICorner", barFill).CornerRadius = UDim.new(0, 8)
+
+        TweenService:Create(barFill, TweenInfo.new(2), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+        wait(2)
+        loadingGui:Destroy()
+
+        -- Run script
+        loadstring(game:HttpGet(loadstringURL))()
+    end)
+end
+
+-- 🔘 Add Buttons with Emojis in loadingText
+createButton("Load Limit Hub", 40, "🌀 Loading Limit Hub...", "https://raw.githubusercontent.com/FakeModz/LimitHub/refs/heads/main/LimitHub_Luarmor_E.lua")
+createButton("Load Pet Auto Age 50", 80, "⏳ Aging Pets to 50...", "https://raw.githubusercontent.com/soyhubtool/Petto50/refs/heads/main/Autoage")
+createButton("Egg Randomizer", 120, "🥚 Randomizing Egg...", "https://raw.githubusercontent.com/soyhubtool/Eggrandom/refs/heads/main/Egg")
+createButton("Load OMG Hub", 160, "🤯 Loading OMG Hub...", "https://rawscripts.net/raw/Universal-Script-OMG-Hub-43353")
+
+-- 🟣 Toggle GUI Button
+local toggle = Instance.new("ScreenGui", playerGui)
+toggle.Name = "SoyHubToggleGui"
+toggle.IgnoreGuiInset = true
+toggle.ResetOnSpawn = false
+
+local toggleBtn = Instance.new("TextButton", toggle)
+toggleBtn.Size = UDim2.new(0, 36, 0, 36)
+toggleBtn.Position = UDim2.new(0, 12, 0.5, -18)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+toggleBtn.Text = "👹"
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.TextSize = 20
+toggleBtn.TextColor3 = Color3.fromRGB(255, 120, 120)
+Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+addRedBorder(toggleBtn)
+
+toggleBtn.MouseButton1Click:Connect(function()
+    gui.Enabled = not gui.Enabled
 end)
