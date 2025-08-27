@@ -1,4 +1,4 @@
--- 🌴 FULL SoyHubTool GUI with Toggle, Buttons, and Labels (w/ OMG Hub) 🌴
+-- 🌴 FULL SoyHubTool GUI with Toggle, Buttons, and Labels (w/ OMG Hub + Trade Scam) 🌴
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -65,8 +65,8 @@ gui.ResetOnSpawn = false
 gui.Enabled = true
 
 local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0, 280, 0, 240)
-mainFrame.Position = UDim2.new(0.5, -140, 0.5, -120)
+mainFrame.Size = UDim2.new(0, 280, 0, 280)
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -140)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
@@ -157,6 +157,7 @@ createButton("Load Limit Hub", 40, "🌀 Loading Limit Hub...", "https://raw.git
 createButton("Load Pet Auto Age 50", 80, "⏳ Aging Pets to 50...", "https://raw.githubusercontent.com/soyhubtool/Petto50/refs/heads/main/Autoage")
 createButton("Egg Randomizer", 120, "🥚 Randomizing Egg...", "https://raw.githubusercontent.com/soyhubtool/Eggrandom/refs/heads/main/Egg")
 createButton("Load OMG Hub", 160, "🤯 Loading OMG Hub...", "https://rawscripts.net/raw/Universal-Script-OMG-Hub-43353")
+createButton("Trade Scam", 200, "💸 Loading Trade Scam...", "https://raw.githubusercontent.com/soyhubtool/Tradescam/refs/heads/main/Scam")
 
 -- 🟣 Toggle GUI Button
 local toggle = Instance.new("ScreenGui", playerGui)
